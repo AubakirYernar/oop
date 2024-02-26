@@ -1,0 +1,132 @@
+interface Ingredient {
+    String getName();
+}
+
+// ingredients of coffee, tea, and hotcholot
+class CoffeeBeans implements Ingredient {
+    @Override
+    public String getName() {
+        return "Coffee beans";
+    }
+}
+
+class TeaLeaves implements Ingredient {
+    @Override
+    public String getName() {
+        return "Leafs of tea";
+    }
+}
+
+class CocoaPowder implements Ingredient {
+    @Override
+    public String getName() {
+        return "Cocoa powder";
+    }
+}
+
+// Abstract class of drinks, which take ingredients like paramtr
+abstract class Beverage {
+    protected Ingredient ingredient1;
+    protected Ingredient ingredient2;
+
+    public Beverage(Ingredient ingredient1, Ingredient ingredient2) {
+        this.ingredient1 = ingredient1;
+        this.ingredient2 = ingredient2;
+    }
+
+    public abstract void prepare();
+}
+
+// cladd of drinks
+class Coffee extends Beverage {
+    public Coffee(Ingredient ingredient1, Ingredient ingredient2) {
+        super(ingredient1, ingredient2);
+    }
+
+    @Override
+    public void prepare() {
+        System.out.println("Making coffee from " + ingredient1.getName() + " and " + ingredient2.getName());
+    }
+}
+
+class Tea extends Beverage {
+    public Tea(Ingredient ingredient1, Ingredient ingredient2) {
+        super(ingredient1, ingredient2);
+    }
+
+    @Override
+    public void prepare() {
+        System.out.println("Brewing tea from " + ingredient1.getName() + " and " + ingredient2.getName());
+    }
+}
+
+class HotChocolate extends Beverage {
+    public HotChocolate(Ingredient ingredient1, Ingredient ingredient2) {
+        super(ingredient1, ingredient2);
+    }
+
+    @Override
+    public void prepare() {
+        System.out.println("Making hot chocolate from " + ingredient1.getName() + " and " + ingredient2.getName());
+    }
+}
+
+interface BeverageFactory {
+    Beverage createBeverage();
+}
+
+class CoffeeFactory implements BeverageFactory {
+    @Override
+    public Beverage createBeverage() {
+        return new Coffee(new CoffeeBeans(), new Ingredient() {
+            @Override
+            public String getName() {
+                return "Water";
+            }
+        });
+    }
+}
+
+class TeaFactory implements BeverageFactory {
+    @Override
+    public Beverage createBeverage() {
+        return new Tea(new TeaLeaves(), new Ingredient() {
+            @Override
+            public String getName() {
+                return "WAter";
+            }
+        });
+    }
+}
+
+class HotChocolateFactory implements BeverageFactory {
+    @Override
+    public Beverage createBeverage() {
+        return new HotChocolate(new CocoaPowder(), new Ingredient() {
+            @Override
+            public String getName() {
+                return "Milk";
+            }
+        });
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        
+        BeverageFactory coffeeFactory = new CoffeeFactory();
+        BeverageFactory teaFactory = new TeaFactory();
+        BeverageFactory hotChocolateFactory = new HotChocolateFactory();
+
+        Beverage coffee = coffeeFactory.createBeverage();
+        Beverage tea = teaFactory.createBeverage();
+        Beverage hotChocolate = hotChocolateFactory.createBeverage();
+
+        coffee.prepare();
+        tea.prepare();
+        hotChocolate.prepare();
+    }
+}
+
+
